@@ -53,7 +53,7 @@ func (cf *CmdFlags) Execute(todos *Todos) {
 		todos.DeleteTodo(cf.Del)
 
 	default:
-		println("Usage of todo-app:\n\n-add <'Titre'>\nAjouter une tache.\n\n-del <Id>\nSupprimer une tache spécifié par son index.\n\n-edit <Id:'Nouveau titre'>\nEditer une tache existante spécifié par son index puis entrer son nouveau titre.\n\n-toggle <Id>\nCompléter/décompléter une tache existante spécifié par son index.\n\n-list\nlister les taches.")
+		println("Usage of lachignol-todo:\n\n-add <'Titre'>\nAjouter une tache.\n\n-del <Id>\nSupprimer une tache spécifié par son index.\n\n-edit <Id:'Nouveau titre'>\nEditer une tache existante spécifié par son index puis entrer son nouveau titre.\n\n-toggle <Id>\nCompléter/décompléter une tache existante spécifié par son index.\n\n-list\nlister les taches.")
 	}
 
 }
