@@ -3,6 +3,7 @@ package main
 import (
 	"errors"
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"time"
@@ -60,11 +61,10 @@ func (Todos *Todos) Toggle(index int) error {
 	if !iscompleted {
 		Completed_at := time.Now()
 		t[index].Completed_at = &Completed_at
-	}else{
+	} else {
 		t[index].Completed_at = nil
 	}
 	t[index].Completed = !iscompleted
-	
 
 	return nil
 }
@@ -99,4 +99,26 @@ func (Todos *Todos) print() {
 
 	}
 	table.Render()
+}
+
+func (todos *Todos) Uninstall() {
+	userdire, _ := os.UserHomeDir()
+	dirpath := fmt.Sprintf("%s/lachignol-todo/", userdire)
+	dbPath := fmt.Sprintf("%s/lachignol-todo/todos.json", userdire)
+
+	err := os.Remove(dbPath)
+	if err != nil {
+		log.Fatal(err)
+
+	}
+
+	fmt.Printf("Supression du fichier %v \n\n", dbPath)
+
+	e := os.Remove(dirpath)
+	if e != nil {
+		log.Fatal(e)
+
+	}
+	fmt.Printf("Supression du repertoire %v\n\nIl ne vous reste plus qu'a supprimer le binaire 'lachignol-todo' dans le repertoire $HOME/go/bin/ .\n", dirpath)
+
 }

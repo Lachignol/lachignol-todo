@@ -2,15 +2,37 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
+	"log"
 	"os"
 )
 
-type Storage[T any] struct {
-	Filename string
+func Init() (string, error) {
+	userdire, _ := os.UserHomeDir()
+	dirpath := fmt.Sprintf("%s/lachignol-todo/", userdire)
+	dbPath := fmt.Sprintf("%s/lachignol-todo/todos.json", userdire)
+
+	// Vérifier si le fichier existe
+	if _, err := os.Stat(dbPath); os.IsNotExist(err) {
+		log.Printf("Le fichier de la base de données %s n'existe pas.", dbPath)
+		log.Printf("Nous procédons donc a l'installation ...")
+		//si il existe pas on crée le repertoire
+		err := os.Mkdir(dirpath, 0700)
+		if err != nil {
+			fmt.Println(err)
+		}
+		log.Printf("Création du repertoire %s .", dirpath)
+		log.Printf("Installation terminée.")
+	}
+	return dbPath, nil
 }
 
-func NewStorage[t any](filename string) *Storage[t] {
-	return &Storage[t]{Filename: filename}
+type Storage[T any] struct {
+	JsonFilepath string
+}
+
+func NewStorage[t any](jsonFilepath string) *Storage[t] {
+	return &Storage[t]{JsonFilepath: jsonFilepath}
 }
 
 func (s *Storage[T]) Save(data T) error {
@@ -19,14 +41,16 @@ func (s *Storage[T]) Save(data T) error {
 		return err
 
 	}
-	return os.WriteFile(s.Filename, filedata, 0644)
+	return os.WriteFile(s.JsonFilepath, filedata, 0644)
 }
 
 func (s *Storage[T]) Load(data *T) error {
-	filedata, err := os.ReadFile(s.Filename)
+	filedata, err := os.ReadFile(s.JsonFilepath)
 	if err != nil {
 		return err
 	}
 	return json.Unmarshal(filedata, data)
 
 }
+
+

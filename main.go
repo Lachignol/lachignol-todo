@@ -1,10 +1,16 @@
 package main
 
+var dbPath string
+
+func init() {
+	dbPath, _ = Init()
+}
+
 func main() {
 	todos := Todos{}
-	storage := NewStorage[Todos]("todos.json")
+	storage := NewStorage[Todos](dbPath)
 	storage.Load(&todos)
-	cmdFlags:=NewcmdFlags()
+	cmdFlags := NewcmdFlags()
 	cmdFlags.Execute(&todos)
 	storage.Save(todos)
 
